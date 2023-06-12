@@ -1,54 +1,88 @@
 package carsharing;
 
+import carsharing.entities.Car;
 import carsharing.entities.Company;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class Manager {
 
-    public CarSharingRepository carSharingRepository;;
+    Scanner scan = new Scanner(System.in);
+    public CarSharingRepository carSharingRepository;
 
     public Manager(String dbName) {
         carSharingRepository = new CarSharingRepository(dbName);
     }
-    public void displayCompanyOptions() {
+    public void displayGeneralOptions() {
         System.out.println();
         System.out.println("1. Company list");
         System.out.println("2. Create a company");
         System.out.println("0. Back");
     }
 
+    public void displayCompanyOptions(int companyId) {
+        Company company = carSharingRepository.getCompany(companyId);
+        System.out.println();
+        System.out.printf("'%s' company\n", company.getName());
+        System.out.println("1. Car list");
+        System.out.println("2. Create a car");
+        System.out.println("0. Back");
+    }
 
-    public void displayGeneralOptions() {
+
+    public void displayLoginOptions() {
         System.out.println();
         System.out.println("1. Log in as a manager");
         System.out.println("0. Exit");
     }
 
 
-    public void listCompanies() {
+    public boolean listCompanies() {
 
         List<Company> companies = carSharingRepository.getCompanies();
-//        List<Company> companies = new ArrayList<>();
         if (companies.size() == 0) {
             System.out.println();
             System.out.println("The company list is empty!");
-            return;
+            return true;
         }
         System.out.println();
-        System.out.println("Company list:");
+        System.out.println("Choose a company:");
         companies.forEach(System.out::println);
+        System.out.println("0. Back");
+        return false;
     }
 
     public void createCompany() {
         System.out.println();
         System.out.println("Enter the company name:");
-        Scanner scan = new Scanner(System.in);
         String name = scan.nextLine();
         carSharingRepository.addCompany(name);
         System.out.println("The company was created!");
+    }
+
+
+    public void listCarsForCompany(int companyChoice) {
+        List<Car> cars = carSharingRepository.getCars(companyChoice);
+
+        if (cars.size() == 0) {
+            System.out.println();
+            System.out.println("The car list is empty!");
+            return;
+        }
+        System.out.println();
+        System.out.println("Car list:");
+        for (int i = 1; i <= cars.size(); i++) {
+            System.out.printf("%d. %s\n", i, cars.get(i - 1).getName());
+        }
+
+    }
+
+    public void createCarForCompany(int companyChoice) {
+        System.out.println();
+        System.out.println("Enter the car name:");
+        String name = scan.nextLine();
+        carSharingRepository.createCar(name, companyChoice);
+        System.out.println("The car was added!");
     }
 }
