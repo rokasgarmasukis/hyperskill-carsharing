@@ -1,14 +1,14 @@
 package carsharing.entities;
 
-public class Car {
+public class Customer {
     private int id;
     private String name;
-    private int companyId;
+    private int rentedCarId;
 
-    public Car(int id, String name, int companyId) {
+    public Customer(int id, String name, int rentedCarId) {
         this.id = id;
         this.name = name;
-        this.companyId = companyId;
+        this.rentedCarId = rentedCarId;
     }
 
     public int getId() {
@@ -27,18 +27,11 @@ public class Car {
         this.name = name;
     }
 
-    public int getCompanyId() {
-        return companyId;
+    public int getRentedCarId() {
+        return rentedCarId;
     }
 
-    public void setCompanyId(int companyId) {
-        this.companyId = companyId;
+    public void setRentedCarId(int rentedCarId) {
+        this.rentedCarId = rentedCarId;
     }
-
-    @Override
-    public String toString() {
-        return String.format("%d. %s", id, name);
-    }
-
-
 }

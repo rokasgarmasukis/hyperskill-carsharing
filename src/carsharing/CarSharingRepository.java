@@ -46,6 +46,15 @@ public class CarSharingRepository {
 
             stmt.execute(sql);
 
+            sql = "create table if not exists customer (" +
+                    "id int identity, " +
+                    "name varchar unique not null, " +
+                    "rented_car_id int," +
+                    "foreign key (rented_car_id) references car(id)" +
+                    ")";
+
+            stmt.execute(sql);
+
 //          connection.close();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -111,11 +120,11 @@ public class CarSharingRepository {
         List<Car> cars = new ArrayList<>();
         try {
             Statement stmt = connection.createStatement();
-            String sql = String.format("select id, name from car where company_id = %d", companyId);
+            String sql = String.format("select id, name, company_id from car where company_id = %d", companyId);
             ResultSet rs = stmt.executeQuery(sql);
 
             while(rs.next()) {
-                cars.add(new Car(rs.getInt("id"), rs.getString("name")));
+                cars.add(new Car(rs.getInt("id"), rs.getString("name"), rs.getInt("company_id")));
             }
 
             rs.close();
