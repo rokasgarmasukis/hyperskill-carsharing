@@ -1,14 +1,25 @@
 package carsharing.entities;
 
+import java.net.Inet4Address;
+
 public class Customer {
     private int id;
     private String name;
-    private int rentedCarId;
+    private Integer rentedCarId = null;
 
     public Customer(int id, String name, int rentedCarId) {
         this.id = id;
         this.name = name;
         this.rentedCarId = rentedCarId;
+    }
+
+    public Customer(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
+    public Customer() {
+
     }
 
     public int getId() {
@@ -27,7 +38,7 @@ public class Customer {
         this.name = name;
     }
 
-    public int getRentedCarId() {
+    public Integer getRentedCarId() {
         return rentedCarId;
     }
 

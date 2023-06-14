@@ -16,18 +16,23 @@ public class Main {
         CarSharingRepository carSharingRepository = new CarSharingRepository(dbName);
         Scanner scanner = new Scanner(System.in);
         ManagerConsole managerConsole = new ManagerConsole(carSharingRepository);
-        CustomerConsole customer = new CustomerConsole(carSharingRepository);
+        CustomerConsole customerConsole = new CustomerConsole(carSharingRepository);
 
 
         menu1:
         while(true) {
-            // 1 - login
-            // 0 - exit
+            // 1. Log in as a manager
+            // 2. Log in as a customer
+            // 3. Create a customer
+            // 0. Exit
             displayLoginOptions();
             int choice = Integer.parseInt(scanner.nextLine());
-            // exit if 0
+
             if (choice == 0) break;
-            // login if 1
+
+            if (choice == 3) customerConsole.createCustomer();
+
+            // MANAGER Console
             if (choice == 1) {
                 menuManager2:
                 while(true) {
@@ -78,14 +83,46 @@ public class Main {
                     }
                 }
             }
+
+            // CUSTOMER Console
             if (choice == 2) {
                 menuCustomer2:
                 while(true) {
+                    boolean customersExist = customerConsole.listCustomers();
+                    if (!customersExist) break;
+
+                    int customerId = Integer.parseInt(scanner.nextLine());
+                    if (customerId == 0) break;
+                    while (true) {
+                        // 1. Rent a car
+                        // 2. Return a rented car
+                        // 3. My rented car
+                        // 0. Back
+                        customerConsole.displayCustomerOptions();
+                        int carRentingChoice = Integer.parseInt(scanner.nextLine());
+                        if (carRentingChoice == 0) break;
+                        if (carRentingChoice == 3) {
+                            customerConsole.displayRentedCar(customerId);
+                            continue;
+                        }
+                        if (carRentingChoice == 1) {
+                            boolean customerHasCarAlready = customerConsole.hasCar(customerId);
+                            if (customerHasCarAlready) continue;
+
+                            boolean companiesExist = customerConsole.listCompanies();
+                            if (!companiesExist) continue;
+                            int companyChoice = Integer.parseInt(scanner.nextLine());
+
+                            boolean carsExist = customerConsole.listCarsForCompany(companyChoice);
+                            if (!carsExist) continue;
+                            int carChoice = Integer.parseInt(scanner.nextLine());
+                            customerConsole.rentCar(customerId, carChoice);
+                            continue;
+                        }
+                        if (carRentingChoice == 2) customerConsole.returnCar(customerId);
+                    }
 
                 }
-            }
-            if (choice == 3) {
-
             }
 
         }
@@ -95,6 +132,8 @@ public class Main {
     public static void displayLoginOptions() {
         System.out.println();
         System.out.println("1. Log in as a manager");
+        System.out.println("2. Log in as a customer");
+        System.out.println("3. Create a customer");
         System.out.println("0. Exit");
     }
 }

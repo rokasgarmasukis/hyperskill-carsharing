@@ -11,6 +11,10 @@ public class Car {
         this.companyId = companyId;
     }
 
+    public Car(){
+
+    }
+
     public int getId() {
         return id;
     }
