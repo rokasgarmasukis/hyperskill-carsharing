@@ -2,6 +2,7 @@ package carsharing;
 
 import carsharing.entities.Car;
 import carsharing.entities.Company;
+import carsharing.entities.Customer;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -149,4 +150,22 @@ public class CarSharingRepository {
         }
     }
 
+    public List<Customer> getCustomers() {
+        List<Customer> customers = new ArrayList<>();
+        try {
+            Statement stmt = connection.createStatement();
+            String sql = "select id, name, rented_car_id from customer";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while(rs.next()) {
+                customers.add(new Customer(rs.getInt("id"), rs.getString("name"), rs.getInt("rented_car_id")));
+            }
+
+            rs.close();
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return customers;
+    }
 }

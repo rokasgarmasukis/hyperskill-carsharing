@@ -6,13 +6,13 @@ import carsharing.entities.Company;
 import java.util.List;
 import java.util.Scanner;
 
-public class Manager {
+public class ManagerConsole {
 
     Scanner scan = new Scanner(System.in);
-    public CarSharingRepository carSharingRepository;
+    private final CarSharingRepository carSharingRepository;
 
-    public Manager(String dbName) {
-        carSharingRepository = new CarSharingRepository(dbName);
+    public ManagerConsole(CarSharingRepository carSharingRepository) {
+        this.carSharingRepository = carSharingRepository;
     }
     public void displayGeneralOptions() {
         System.out.println();
@@ -30,27 +30,19 @@ public class Manager {
         System.out.println("0. Back");
     }
 
-
-    public void displayLoginOptions() {
-        System.out.println();
-        System.out.println("1. Log in as a manager");
-        System.out.println("0. Exit");
-    }
-
-
     public boolean listCompanies() {
 
         List<Company> companies = carSharingRepository.getCompanies();
         if (companies.size() == 0) {
             System.out.println();
             System.out.println("The company list is empty!");
-            return true;
+            return false;
         }
         System.out.println();
         System.out.println("Choose a company:");
         companies.forEach(System.out::println);
         System.out.println("0. Back");
-        return false;
+        return true;
     }
 
     public void createCompany() {

@@ -13,69 +13,89 @@ public class Main {
             dbName = "test";
         }
 
+        CarSharingRepository carSharingRepository = new CarSharingRepository(dbName);
         Scanner scanner = new Scanner(System.in);
-        Manager manager = new Manager(dbName);
+        ManagerConsole managerConsole = new ManagerConsole(carSharingRepository);
+        CustomerConsole customer = new CustomerConsole(carSharingRepository);
 
 
         menu1:
         while(true) {
             // 1 - login
             // 0 - exit
-            manager.displayLoginOptions();
+            displayLoginOptions();
             int choice = Integer.parseInt(scanner.nextLine());
             // exit if 0
             if (choice == 0) break;
             // login if 1
-            menu2:
-            while(true) {
-                // 1. Company list
-                // 2. Create a company
-                // 0. Back
-                manager.displayGeneralOptions();
-                int generalChoice = Integer.parseInt(scanner.nextLine());
+            if (choice == 1) {
+                menuManager2:
+                while(true) {
+                    // 1. Company list
+                    // 2. Create a company
+                    // 0. Back
+                    managerConsole.displayGeneralOptions();
+                    int generalChoice = Integer.parseInt(scanner.nextLine());
 
-                if (generalChoice == 0) break;
+                    if (generalChoice == 0) break;
 
-                if (generalChoice == 2) manager.createCompany();
+                    if (generalChoice == 2) managerConsole.createCompany();
 
 
-                if (generalChoice == 1) { // show company list
-                    menu3:
-                    while (true) {
-                        // Choose company
-                        // 1
-                        // 2
-                        // ...
-                        // 0. Back
-                        boolean emptyList = manager.listCompanies();
-                        if (emptyList) break;
-
-                        int companyChoice = Integer.parseInt(scanner.nextLine());
-
-                        if (companyChoice == 0) break;
-
-                        // check if company exists...
-                        menu4:
+                    if (generalChoice == 1) { // show company list
+                        menuManager3:
                         while (true) {
-                            // <Company Name> company:
-                            // 1. Car list
-                            // 2. Create a car
+                            // Choose company
+                            // 1
+                            // 2
+                            // ...
                             // 0. Back
-                            manager.displayCompanyOptions(companyChoice);
-                            int companyOptions = Integer.parseInt(scanner.nextLine());
+                            boolean companiesExist = managerConsole.listCompanies();
+                            if (!companiesExist) break;
 
-                            if (companyOptions == 0) break menu3;
+                            int companyChoice = Integer.parseInt(scanner.nextLine());
 
-                            if (companyOptions == 1) manager.listCarsForCompany(companyChoice);
+                            if (companyChoice == 0) break;
 
-                            if (companyOptions == 2) manager.createCarForCompany(companyChoice);
+                            // check if company exists...
+                            menu4:
+                            while (true) {
+                                // <Company Name> company:
+                                // 1. Car list
+                                // 2. Create a car
+                                // 0. Back
+                                managerConsole.displayCompanyOptions(companyChoice);
+                                int companyOptions = Integer.parseInt(scanner.nextLine());
 
+                                if (companyOptions == 0) break menuManager3;
+
+                                if (companyOptions == 1) managerConsole.listCarsForCompany(companyChoice);
+
+                                if (companyOptions == 2) managerConsole.createCarForCompany(companyChoice);
+
+                            }
                         }
                     }
                 }
             }
+            if (choice == 2) {
+                menuCustomer2:
+                while(true) {
+
+                }
+            }
+            if (choice == 3) {
+
+            }
+
         }
 
+    }
+
+    public static void displayLoginOptions() {
+        System.out.println();
+        System.out.println("1. Log in as a manager");
+        System.out.println("0. Exit");
     }
 }
 
